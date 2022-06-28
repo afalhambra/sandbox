@@ -133,6 +133,10 @@
             <slack.channel.name>mc</slack.channel.name>
 
             <webhook.site.uuid>${env.WEBHOOK_SITE_UUID}</webhook.site.uuid>
+
+            <!-- Performance test properties -->
+            <slack.webhook.performance.url></slack.webhook.performance.url>
+            <performance.hyperfoil.url></performance.hyperfoil.url>
           </systemProperties>
         </configuration>
       </plugin>

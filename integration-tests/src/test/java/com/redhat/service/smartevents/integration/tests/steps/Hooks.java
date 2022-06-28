@@ -19,6 +19,7 @@ import com.redhat.service.smartevents.integration.tests.common.Utils;
 import com.redhat.service.smartevents.integration.tests.context.TestContext;
 import com.redhat.service.smartevents.integration.tests.resources.BridgeResource;
 import com.redhat.service.smartevents.integration.tests.resources.ProcessorResource;
+import com.redhat.service.smartevents.integration.tests.resources.webhook.performance.WebhookPerformanceResource;
 import com.redhat.service.smartevents.integration.tests.resources.webhook.site.WebhookSiteQuerySorting;
 import com.redhat.service.smartevents.integration.tests.resources.webhook.site.WebhookSiteResource;
 import com.redhat.service.smartevents.manager.api.models.responses.BridgeResponse;
@@ -69,6 +70,11 @@ public class Hooks {
                     return yesterday.isAfter(requestCreatedAt);
                 })
                 .forEach(request -> WebhookSiteResource.deleteRequest(request));
+    }
+
+    @BeforeAll(order = 2)
+    public static void webhookPerformanceCleanUp() {
+        WebhookPerformanceResource.deleteAll();
     }
 
     @Before

@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webhook-app
+  labels:
+    app-component: webhook-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app-component: webhook-app
+  template:
+    metadata:
+      labels:
+        app-component: webhook-app
+    spec:
+      containers:
+        - name: webhook-app
+          image: quay.io/antferna/webhook-perf-test:1.0
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webhook-app
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      nodePort: 31014
+  selector:
+    app-component: webhook-app

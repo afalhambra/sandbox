@@ -15,7 +15,7 @@ public class ContextResolver {
     private static final Pattern PLACEHOLDER_REGEX = Pattern.compile("\\$\\{.*\\}");
 
     private static final List<Resolver> RESOLVERS = Arrays.asList(
-            new BridgeIdResolver(),
+            new BridgeResolver(),
             new CloudEventIdResolver(),
             new SystemPropertyResolver(),
             new UuidResolver());

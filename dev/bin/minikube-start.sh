@@ -46,6 +46,10 @@ if [ "${disable_extra_components}" != 'true' ]; then
   sleep 5
   kubectl wait pod -l app-component=keycloak --for=condition=Ready --timeout=600s -n keycloak
   sleep 5
+  kustomize build ${KUSTOMIZE_DIR}/overlays/minikube/performance | kubectl apply -f -
+  sleep 5
+  kubectl wait deployment --all --timeout=600s --for=condition=Available -n performance
+  sleep 5
   kubectl apply -f https://raw.githubusercontent.com/prometheus-operator/kube-prometheus/v0.9.0/manifests/setup/prometheus-operator-0servicemonitorCustomResourceDefinition.yaml
   . "${SCRIPT_DIR_PATH}/knative-installer.sh"
   yes | istioctl manifest apply --set profile=default --set values.gateways.istio-ingressgateway.type="ClusterIP"
