@@ -1,10 +1,5 @@
 package com.redhat.service.smartevents.integration.tests.steps;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UncheckedIOException;
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 
 import org.awaitility.Awaitility;
@@ -15,6 +10,7 @@ import com.redhat.service.smartevents.integration.tests.context.resolver.Context
 import com.redhat.service.smartevents.integration.tests.resources.PerformanceResource;
 import com.redhat.service.smartevents.integration.tests.resources.webhook.performance.WebhookPerformanceResource;
 
+import io.cucumber.docstring.DocString;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -31,15 +27,11 @@ public class PerformanceSteps {
     }
 
     @When("^Create benchmark on Hyperfoil \"([^\"]*)\" instance with content:$")
-    public void createBenchmarkOnHyperfoilWithContent(String hfInstance, String benchmarkRequestJson) {
-        String resolvedBenchmarkRequestJson = ContextResolver.resolveWithScenarioContext(context, benchmarkRequestJson);
+    public void createBenchmarkOnHyperfoilWithContent(String hfInstance, DocString benchmarkRequest) {
+        String resolvedBenchmarkRequest = ContextResolver.resolveWithScenarioContext(context, benchmarkRequest.getContent());
 
-        try (InputStream resourceStream = new ByteArrayInputStream(resolvedBenchmarkRequestJson.getBytes(StandardCharsets.UTF_8))) {
-            PerformanceResource.addBenchmark(context.getManagerToken(), resourceStream);
-            context.getScenario().log("Benchmark created as below\n\"" + resolvedBenchmarkRequestJson + "\n\"");
-        } catch (IOException e) {
-            throw new UncheckedIOException("Error with inputstream", e);
-        }
+        PerformanceResource.addBenchmark(context.getManagerToken(), resolvedBenchmarkRequest, benchmarkRequest.getContentType());
+        context.getScenario().log("Benchmark created as below\n\"" + resolvedBenchmarkRequest + "\n\"");
     }
 
     @Then("^Run benchmark \"([^\"]*)\" on Hyperfoil \"([^\"]*)\" instance within (\\d+) (?:minute|minutes)$")
