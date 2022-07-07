@@ -19,6 +19,7 @@ public class ContextResolver {
             new BridgeEndpointPathResolver(),
             new BridgeIdResolver(),
             new CloudEventIdResolver(),
+            new ManagerAuthenticationTokenResolver(),
             new SystemPropertyResolver(),
             new UuidResolver());
 

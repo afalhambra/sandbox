@@ -6,8 +6,6 @@ import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.awaitility.Awaitility;
 
@@ -26,20 +24,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PerformanceSteps {
 
-    private static final String ACCESS_TOKEN_REGEX = "\\$\\{perf.access.token\\}";
-    private static final String PERF_TEST_NAME_REGEX = "\\$\\{perf.test.name\\}";
-
     private final TestContext context;
 
     public PerformanceSteps(TestContext context) {
         this.context = context;
     }
 
-    @When("^Create benchmark \"([^\"]*)\" on Hyperfoil \"([^\"]*)\" instance within (\\d+) (?:minute|minutes) with content:$")
-    public void createBenchmarkOnHyperfoilWithinMinutesWithContent(String perfTestName, String hfInstance, int timeoutMinutes, String benchmarkRequestJson) {
-        String resolvedBenchmarkRequestJson = ContextResolver.resolveWithScenarioContext(context, benchmarkRequestJson
-                                                                                                    .replaceAll(ACCESS_TOKEN_REGEX, context.getManagerToken())
-                                                                                                    .replaceAll(PERF_TEST_NAME_REGEX, perfTestName));
+    @When("^Create benchmark on Hyperfoil \"([^\"]*)\" instance with content:$")
+    public void createBenchmarkOnHyperfoilWithContent(String hfInstance, String benchmarkRequestJson) {
+        String resolvedBenchmarkRequestJson = ContextResolver.resolveWithScenarioContext(context, benchmarkRequestJson);
 
         try (InputStream resourceStream = new ByteArrayInputStream(resolvedBenchmarkRequestJson.getBytes(StandardCharsets.UTF_8))) {
             PerformanceResource.addBenchmark(context.getManagerToken(), resourceStream);
@@ -47,17 +40,6 @@ public class PerformanceSteps {
         } catch (IOException e) {
             throw new UncheckedIOException("Error with inputstream", e);
         }
-
-        Awaitility.await()
-                .conditionEvaluationListener(new AwaitilityOnTimeOutHandler(() -> PerformanceResource
-                        .getBenchmarkDetailsResponse(context.getManagerToken(), perfTestName).then().log().all()))
-                .atMost(Duration.ofMinutes(timeoutMinutes))
-                .pollInterval(Duration.ofSeconds(5))
-                .untilAsserted(
-                        () -> PerformanceResource
-                                .getBenchmarkDetailsResponse(context.getManagerToken(), perfTestName)
-                                .then()
-                                .statusCode(200));
     }
 
     @Then("^Run benchmark \"([^\"]*)\" on Hyperfoil \"([^\"]*)\" instance within (\\d+) (?:minute|minutes)$")

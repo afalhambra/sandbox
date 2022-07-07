@@ -30,9 +30,9 @@ Feature: Sending cloud events performance tests
 
   @performance
   Scenario: Send Cloud Event
-    When Create benchmark "rhose-send-cloud-events" on Hyperfoil "hf-controller" instance within 2 minutes with content:
+    When Create benchmark on Hyperfoil "hf-controller" instance with content:
       """yaml
-      name: ${perf.test.name}
+      name: rhose-send-cloud-events
       agents:
       - driver01
       - driver02
@@ -63,7 +63,7 @@ Feature: Sending cloud events performance tests
                     }
                   headers:
                     content-type: application/cloudevents+json
-                    authorization: Bearer ${perf.access.token}
+                    authorization: Bearer ${manager.authentication.token}
       """
     Then Run benchmark "rhose-send-cloud-events" on Hyperfoil "hf-controller" instance within 15 minutes
     And number of cloud events sent is greater than 0
