@@ -47,17 +47,6 @@ public class PerformanceSteps {
         } catch (IOException e) {
             throw new UncheckedIOException("Error with inputstream", e);
         }
-
-        Awaitility.await()
-                .conditionEvaluationListener(new AwaitilityOnTimeOutHandler(() -> PerformanceResource
-                        .getBenchmarkDetailsResponse(context.getManagerToken(), perfTestName).then().log().all()))
-                .atMost(Duration.ofMinutes(timeoutMinutes))
-                .pollInterval(Duration.ofSeconds(5))
-                .untilAsserted(
-                        () -> PerformanceResource
-                                .getBenchmarkDetailsResponse(context.getManagerToken(), perfTestName)
-                                .then()
-                                .statusCode(200));
     }
 
     @Then("^Run benchmark \"([^\"]*)\" on Hyperfoil \"([^\"]*)\" instance within (\\d+) (?:minute|minutes)$")
