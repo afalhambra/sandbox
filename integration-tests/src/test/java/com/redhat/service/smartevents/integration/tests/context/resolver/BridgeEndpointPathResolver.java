@@ -7,7 +7,7 @@ import com.redhat.service.smartevents.integration.tests.context.TestContext;
 
 public class BridgeEndpointPathResolver implements Resolver {
 
-    private static final Pattern BRIDGE_ENDPOINT_PATH_REGEX = Pattern.compile("\\$\\{bridge\\.([^\\.]+)\\.endpoint.path\\}");
+    private static final Pattern BRIDGE_ENDPOINT_PATH_REGEX = Pattern.compile("\\$\\{bridge\\.([^\\.]+)\\.endpoint\\.path\\}");
 
     public boolean match(String placeholder) {
         return BRIDGE_ENDPOINT_PATH_REGEX.matcher(placeholder).find();

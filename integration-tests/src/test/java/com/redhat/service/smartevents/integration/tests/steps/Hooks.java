@@ -74,7 +74,9 @@ public class Hooks {
 
     @BeforeAll(order = 2)
     public static void webhookPerformanceCleanUp() {
-        WebhookPerformanceResource.deleteAll();
+        if (WebhookPerformanceResource.isSpecified()) {
+            WebhookPerformanceResource.deleteAll();
+        }
     }
 
     @Before

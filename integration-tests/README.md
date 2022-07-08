@@ -43,9 +43,12 @@ Test identifier is a specific resource identifier used in a scenario (for exampl
 It is possible to use various placeholders in feature files, allowing dynamic acess to runtime values and system identifiers. The placeholders use format `${placeholder-value}`.
 
 Currently, there is a possibility to use these placeholders in feature files:
-- ${env.`<System property name>`} to use a System property
+- ${bridge.`<Bridge name>`.endpoint.base} to use Bridge endpoint base URL (i.e. for http://localhost:80/something it will return http://localhost:80)
+- ${bridge.`<Bridge name>`.endpoint.path} to use Bridge endpoint path (i.e. for http://localhost:80/some/thing it will return /some/thing)
 - ${bridge.`<Bridge name>`.id} to use actual "Bridge id"
 - ${cloud-event.`<Cloud event id>`.id} to use "System cloud event id" (Cloud event id which is actually used for Cloud event invocation)
+- ${env.`<System property name>`} to use a System property
+- ${manager.authentication.token} to use a token for communication with Manager
 - ${uuid.`<Uuid name>`} to use unique identifier. Useful to distinguish historical data produced by the same test for example.
 
 ## Test execution

@@ -37,4 +37,8 @@ public class WebhookPerformanceResource {
                 .log().ifValidationFails()
                 .statusCode(200);
     }
+
+    public static boolean isSpecified() {
+        return BASE_ENDPOINT_URL != null && !BASE_ENDPOINT_URL.isBlank();
+    }
 }
