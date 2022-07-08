@@ -31,7 +31,7 @@ Feature: Sending cloud events performance tests
   @performance
   Scenario: Send Cloud Event
     When Create benchmark on Hyperfoil "hf-controller" instance with content:
-      """yaml
+      """text/vnd.yaml
       name: rhose-send-cloud-events
       agents:
       - driver01

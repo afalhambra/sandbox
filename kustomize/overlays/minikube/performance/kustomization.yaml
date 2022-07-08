@@ -1,5 +1,0 @@
-namespace: performance
-resources:
-- namespace.yaml
-- hyperfoil.yaml
-- webhook-app.yaml
